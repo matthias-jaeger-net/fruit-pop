@@ -1,0 +1,80 @@
+@keyframes shake {
+    0% {
+        transform: translate(0, 0);
+    }
+    20% {
+        transform: translate(-5px, 5px);
+    }
+    40% {
+        transform: translate(5px, -5px);
+    }
+    60% {
+        transform: translate(-5px, 5px);
+    }
+    80% {
+        transform: translate(5px, -5px);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+.shake {
+    animation: shake 0.4s;
+}
+
+/* General flash animation */
+@keyframes flash {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+        color: gold;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.flash {
+    animation: flash 0.4s ease-in-out;
+}
+
+/* Shake effect */
+@keyframes bigShake {
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+    25% {
+        transform: translate(-5px, 5px);
+    }
+    50% {
+        transform: translate(5px, -5px);
+    }
+    75% {
+        transform: translate(-5px, -5px);
+    }
+}
+
+.big-shake {
+    animation: bigShake 0.4s ease;
+}
+
+/* Pulse glow for high-value match */
+@keyframes glowPulse {
+    0% {
+        text-shadow: 0 0 0px gold;
+    }
+    50% {
+        text-shadow: 0 0 10px gold, 0 0 20px orange;
+    }
+    100% {
+        text-shadow: 0 0 0px gold;
+    }
+}
+
+.glow {
+    animation: glowPulse 0.7s ease-in-out;
+}
