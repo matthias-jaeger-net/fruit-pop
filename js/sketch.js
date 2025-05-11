@@ -157,6 +157,11 @@ function animateBoxes() {
     }
 }
 
+function touchStarted() {
+    mousePressed(); // reuse the logic
+    return false; // prevent default scrolling behavior
+}
+
 function mousePressed() {
     let offsetX = -(cols * (boxSize + spacing)) / 2 + (boxSize + spacing) / 2;
     let offsetY = -(rows * (boxSize + spacing)) / 2 + (boxSize + spacing) / 2;
