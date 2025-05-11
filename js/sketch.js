@@ -157,17 +157,21 @@ function animateBoxes() {
     }
 }
 
-function touchStarted() {
-    mousePressed(); // reuse the logic
-    return false; // prevent default scrolling behavior
+function mousePressed() {
+    handleInput(mouseX, mouseY);
 }
 
-function mousePressed() {
+function touchStarted() {
+    handleInput(touches[0].x, touches[0].y);
+    return false; // prevent page scrolling
+}
+
+function handleInput(mx, my) {
     let offsetX = -(cols * (boxSize + spacing)) / 2 + (boxSize + spacing) / 2;
     let offsetY = -(rows * (boxSize + spacing)) / 2 + (boxSize + spacing) / 2;
 
-    let mx = mouseX - width / 2;
-    let my = mouseY - height / 2;
+    mx -= width / 2;
+    my -= height / 2;
 
     let guessedX = floor(
         (mx - offsetX + (boxSize + spacing) / 2) / (boxSize + spacing)
@@ -185,13 +189,11 @@ function mousePressed() {
                     grid[cell.x][cell.y].collapsing = true;
                 }
 
-                // Score and feedbacks here
                 score += group.length;
                 select("#score").html(score);
                 sound1.play();
                 sound3.play();
 
-                // Shake on every 1000 points
                 if (score % 1000 === 0 && score > 0) {
                     shakeDuration = 20;
                     triggerShake();
@@ -201,7 +203,6 @@ function mousePressed() {
                     triggerFlash();
                 }
 
-                // Check record
                 if (group.length > record) {
                     record = group.length;
                     select("#record").html(record + " / " + cols * rows);

@@ -45,4 +45,5 @@ canvas,
     display: block;
     aspect-ratio: 9 / 16;
     box-sizing: border-box;
+    touch-action: none; /* Important for iOS */
 }
