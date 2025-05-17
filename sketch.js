@@ -1,9 +1,12 @@
-let cols = 9;
-let rows = 16;
-let boxSize = 40;
+let cols = 5;
+let rows = 9;
+let boxSize;
 let spacing = 0;
-let colors = ["#F44336", "#00BCD4", "#CDDC39"];
-let fruits = ["apple", "grape", "banana"];
+let fruits = ["apple", "grape", "banana", "orange"];
+let bombMode = false;
+let bombCost = 5;
+
+let canvas;
 
 let grid = [];
 let score = 0;
@@ -14,11 +17,23 @@ let shakeMagnitude = 10;
 
 let record = 0;
 
+let achievements = {
+    gridClearedOnce: false,
+    bestStreaks: {
+        apple: 0,
+        banana: 0,
+        grape: 0,
+        orange: 0,
+    },
+};
+
+let achievedMessages = []; // for displaying pop-up reward messages
+
 let images = {};
 
 function preload() {
     images.apple = loadImage("images/apple.png");
-    //images.orange = loadImage("images/orange.png");
+    images.orange = loadImage("images/orange.png");
     images.grape = loadImage("images/grape.png");
     images.banana = loadImage("images/banana.png");
 
@@ -26,11 +41,14 @@ function preload() {
     sound2 = loadSound("sounds/success-1-6297(1).mp3");
     sound3 = loadSound("sounds/fast-whoosh-118248.mp3");
     sound3.amp(0.12);
+
+    sound4 = loadSound("sounds/explosion-312361.mp3");
 }
 
 function setup() {
     randomSeed(1);
-    createCanvas(9 * 80, 16 * 80);
+    canvas = createCanvas(9 * 80, 16 * 80);
+    canvas.parent("#canvas");
     rectMode(CENTER);
 
     boxSize = width / cols;
@@ -41,6 +59,7 @@ function setup() {
             grid[x][y] = createBox(y);
         }
     }
+    sound2.play();
 }
 
 function createBox(y) {
@@ -56,7 +75,7 @@ function createBox(y) {
 }
 
 function draw() {
-    background("#111");
+    background("#9FF7E4");
     translate(width / 2, height / 2);
 
     let offsetX = -(cols * (boxSize + spacing)) / 2 + (boxSize + spacing) / 2;
@@ -74,28 +93,9 @@ function draw() {
                     offsetY + drawY * (boxSize + spacing),
                     0
                 );
-                // fill(b.color);
 
                 let mx = mouseX - width / 2;
                 let my = mouseY - height / 2;
-
-                let boxLeft = offsetX + x * (boxSize + spacing) - boxSize / 2;
-                let boxRight = boxLeft + boxSize;
-                let boxTop =
-                    offsetY + drawY * (boxSize + spacing) - boxSize / 2;
-                let boxBottom = boxTop + boxSize;
-
-                if (
-                    mx > boxLeft &&
-                    mx < boxRight &&
-                    my > boxTop &&
-                    my < boxBottom
-                ) {
-                    stroke("#FFF");
-                    strokeWeight(2);
-                } else {
-                    noStroke();
-                }
 
                 if (images[b.fruit]) {
                     imageMode(CENTER);
@@ -106,13 +106,7 @@ function draw() {
                 pop();
             }
         }
-    }
-
-    if (shakeDuration > 0) {
-        let dx = random(-shakeMagnitude, shakeMagnitude);
-        let dy = random(-shakeMagnitude, shakeMagnitude);
-        translate(dx, dy);
-        shakeDuration--;
+        drawAchievements();
     }
 
     animateBoxes();
@@ -184,11 +178,13 @@ function handleInput(mx, my) {
         let b = grid[guessedX][guessedY];
         if (b.exists && !b.collapsing) {
             let group = findConnected(guessedX, guessedY, b.fruit);
+
             if (group.length > 1) {
                 for (let cell of group) {
                     grid[cell.x][cell.y].collapsing = true;
                 }
 
+                checkAchievements(group);
                 score += group.length;
                 select("#score").html(score);
                 sound1.play();
@@ -212,6 +208,18 @@ function handleInput(mx, my) {
                 }
 
                 waitingToCollapse = true;
+            } else {
+                // 🔥 Auto bomb: destroy single if enough points
+                if (score >= bombCost) {
+                    b.collapsing = true;
+                    score -= bombCost;
+                    select("#score").html(score);
+                    sound4.play();
+                    waitingToCollapse = true;
+                } else {
+                    // Optional: Flash UI to indicate bomb is unavailable
+                    console.log("Not enough points to bomb single fruit.");
+                }
             }
         }
     }
@@ -267,4 +275,58 @@ function createEmptyBox() {
         size: boxSize,
         fruit: "",
     };
+}
+
+function checkAchievements(group) {
+    // 1. Track highest streak for each fruit
+    let fruitType = grid[group[0].x][group[0].y].fruit;
+    if (group.length > achievements.bestStreaks[fruitType]) {
+        achievements.bestStreaks[fruitType] = group.length;
+        showAchievement(`🎉 ${group.length} ${fruitType}s combo.`);
+    }
+
+    // 2. Check if grid is cleared for the first time
+    if (!achievements.gridClearedOnce && isGridEmpty()) {
+        achievements.gridClearedOnce = true;
+        showAchievement("🌟 Grid cleared for the first time!");
+    }
+}
+
+function isGridEmpty() {
+    for (let x = 0; x < cols; x++) {
+        for (let y = 0; y < rows; y++) {
+            if (grid[x][y].exists) return false;
+        }
+    }
+    return true;
+}
+
+function showAchievement(message) {
+    let container = select("#achievementContainer");
+
+    let div = createDiv(message);
+    div.parent(container);
+    div.addClass("achievement-message");
+
+    // Automatically remove after 2 seconds
+    setTimeout(() => {
+        div.remove();
+    }, 2000);
+
+    // Optional sound
+    sound2.play();
+}
+
+function drawAchievements() {
+    textAlign(CENTER);
+    textSize(24);
+    fill("#FFD700");
+    for (let i = achievedMessages.length - 1; i >= 0; i--) {
+        let msg = achievedMessages[i];
+        text(msg.text, 0, -height / 2 + 40 + i * 30);
+        msg.timer--;
+        if (msg.timer <= 0) {
+            achievedMessages.splice(i, 1);
+        }
+    }
 }

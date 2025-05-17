@@ -1,43 +1,33 @@
 @import url("https://fonts.googleapis.com/css2?family=Delius+Swash+Caps&family=Orbitron:wght@400..900&display=swap");
 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Delius Swash Caps", cursive;
+    font-size: 24px;
+}
+
 body,
 main {
-    background: #111;
-    color: white;
-    font-family: "Delius Swash Caps", cursive;
-    text-align: center;
-    margin: 0;
-    padding: 0 16px;
+    background: #9ff7e4;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-}
-
-h2 {
-    font-size: 20px;
-    margin: 0;
-    padding: 0;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
 }
 
 #hud {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     padding: 16px;
     display: flex;
     justify-content: space-between;
 }
 
-#score,
-#record {
-    width: 33%;
-}
-
 canvas,
 #defaultCanvas0 {
-    margin-top: 60px;
     width: 100% !important;
     max-width: 630px !important;
     height: auto !important;
@@ -46,4 +36,22 @@ canvas,
     aspect-ratio: 9 / 16;
     box-sizing: border-box;
     touch-action: none; /* Important for iOS */
+}
+
+#achievementContainer {
+    position: absolute;
+    bottom: 32px;
+    left: 32px;
+    right: 32px;
+    text-align: center;
+    z-index: 10;
+}
+
+.achievement-message {
+    background: #fff;
+    color: #111;
+    padding: 16px;
+    margin: 5px auto;
+    border-radius: 12px;
+    animation: fadeInOut 2s ease-in-out forwards;
 }

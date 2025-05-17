@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <script src="https://cdn.jsdelivr.net/npm/p5@1.11.5/lib/p5.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/addons/p5.sound.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="stylesheet" href="onboarding.css" />
         <link rel="stylesheet" type="text/css" href="css/animations.css" />
         <meta
             name="viewport"
@@ -11,14 +10,17 @@
         />
         <meta charset="utf-8" />
     </head>
-    <body id="gameContainer">
-        <div id="hud">
-            <h2>FruitPop</h2>
-            <h2 id="score">0</h2>
-            <h2 id="record">0 / 144</h2>
-        </div>
-        <div id="grid"></div>
-
-        <script src="js/sketch.js"></script>
+    <body>
+        <main id="onboarding" class="shake">
+            <div class="mesage">
+                <h1>FruitPop</h1>
+                <p>
+                    Complete the board with all types of fruit, earn rewards for
+                    huge combos, and unlock your path to becoming the Master of
+                    Fruits!
+                </p>
+            </div>
+            <a class="button" href="/game.html">Start poppin' fruit</a>
+        </main>
     </body>
 </html>
