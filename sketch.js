@@ -31,6 +31,12 @@ let achievedMessages = []; // for displaying pop-up reward messages
 
 let images = {};
 
+function startGame() {
+    document.getElementById("modal").classList.add("hidden");
+
+    // You might also want to initialize game variables here.
+}
+
 function preload() {
     images.apple = loadImage("images/apple.png");
     images.orange = loadImage("images/orange.png");
