@@ -48,6 +48,10 @@ canvas,
     pointer-events: none; /* ensure no interaction unless activated */
 }
 
+#gameContainer {
+    padding: 32px;
+}
+
 #gameContainer.active canvas {
     pointer-events: auto !important;
 }
