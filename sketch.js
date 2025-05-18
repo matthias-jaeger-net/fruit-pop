@@ -1,5 +1,5 @@
 let cols = 5;
-let rows = 7;
+let rows = 9;
 let boxSize;
 let spacing = 8;
 let fruits = ["apple", "grape", "banana", "orange"];
@@ -18,12 +18,11 @@ let shakeMagnitude = 10;
 let record = 0;
 
 let achievements = {
-    gridClearedOnce: false,
     bestStreaks: {
-        apple: 0,
-        banana: 0,
-        grape: 0,
-        orange: 0,
+        apple: 8,
+        banana: 8,
+        grape: 8,
+        orange: 8,
     },
 };
 
@@ -70,8 +69,6 @@ function setup() {
             grid[x][y] = createBox(y);
         }
     }
-
-    sound2.play();
 }
 
 function createBox(y) {
@@ -217,8 +214,8 @@ function handleInput(mx, my) {
                 if (group.length > record) {
                     record = group.length;
                     select("#record").html(record + " / " + cols * rows);
-                    sound2.play();
-                    sound3.play();
+                    //sound2.play();
+                    //sound3.play();
                     triggerShake();
                 }
 
@@ -300,12 +297,6 @@ function checkAchievements(group) {
     if (group.length > achievements.bestStreaks[fruitType]) {
         achievements.bestStreaks[fruitType] = group.length;
         showAchievement(`🎉 ${group.length} ${fruitType}s combo.`);
-    }
-
-    // 2. Check if grid is cleared for the first time
-    if (!achievements.gridClearedOnce && isGridEmpty()) {
-        achievements.gridClearedOnce = true;
-        showAchievement("🌟 Grid cleared for the first time!");
     }
 }
 
