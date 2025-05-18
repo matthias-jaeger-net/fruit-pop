@@ -31,9 +31,8 @@ let achievedMessages = []; // for displaying pop-up reward messages
 let images = {};
 
 function startGame() {
-    document.getElementById("modal").classList.add("hidden");
-
-    // You might also want to initialize game variables here.
+    select("#modal").addClass("hidden");
+    print("started");
 }
 
 function preload() {
