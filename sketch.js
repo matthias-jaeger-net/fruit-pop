@@ -119,6 +119,7 @@ function draw() {
         }
         drawAchievements();
     }
+    select("#bombs").html(score / bombCost);
 
     animateBoxes();
 }
