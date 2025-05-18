@@ -163,16 +163,25 @@ function animateBoxes() {
 }
 
 function mousePressed() {
-    handleInput(mouseX, mouseY);
-}
-
-function handleInput(mx, my) {
     if (
         document.getElementById("modal").classList.contains("hidden") === false
     ) {
         return; // Don't allow clicks if modal is visible
     }
+    handleInput(mouseX, mouseY);
+}
 
+function touchStarted() {
+    if (
+        document.getElementById("modal").classList.contains("hidden") === false
+    ) {
+        return; // Don't allow clicks if modal is visible
+    }
+    handleInput(touches[0].x, touches[0].y);
+    return false;
+}
+
+function handleInput(mx, my) {
     let offsetX = -(cols * (boxSize + spacing)) / 2 + (boxSize + spacing) / 2;
     let offsetY = -(rows * (boxSize + spacing)) / 2 + (boxSize + spacing) / 2;
 
