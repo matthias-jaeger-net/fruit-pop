@@ -1,5 +1,5 @@
-let cols = 4;
-let rows = 6;
+let cols = 5;
+let rows = 7;
 let boxSize;
 let spacing = 8;
 let fruits = ["apple", "grape", "banana", "orange"];
@@ -42,6 +42,7 @@ function preload() {
     images.orange = loadImage("images/orange.png");
     images.grape = loadImage("images/grape.png");
     images.banana = loadImage("images/banana.png");
+    images.bomb = loadImage("images/bomb.png");
 
     sound1 = loadSound("sounds/ui-pop-sound-316482.mp3");
     sound2 = loadSound("sounds/success-1-6297(1).mp3");
@@ -108,8 +109,10 @@ function draw() {
                 let mx = mouseX - width / 2;
                 let my = mouseY - height / 2;
 
-                if (images[b.fruit]) {
-                    imageMode(CENTER);
+                imageMode(CENTER);
+                if (b.isBomb && images.bomb) {
+                    image(images.bomb, 0, 0, b.size, b.size);
+                } else if (images[b.fruit]) {
                     image(images[b.fruit], 0, 0, b.size, b.size);
                 }
 
@@ -223,6 +226,7 @@ function handleInput(mx, my) {
             } else {
                 // 🔥 Auto bomb: destroy single if enough points
                 if (score >= bombCost) {
+                    b.isBomb = true;
                     b.collapsing = true;
                     score -= bombCost;
                     select("#score").html(score);
