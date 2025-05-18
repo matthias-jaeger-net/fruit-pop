@@ -19,10 +19,10 @@ let record = 0;
 
 let achievements = {
     bestStreaks: {
-        apple: 8,
-        banana: 8,
-        grape: 8,
-        orange: 8,
+        apple: 4,
+        banana: 4,
+        grape: 4,
+        orange: 4,
     },
 };
 
