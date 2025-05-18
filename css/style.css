@@ -45,15 +45,11 @@ canvas,
     display: block;
     box-sizing: border-box;
     touch-action: none;
+    pointer-events: none; /* ensure no interaction unless activated */
 }
 
-#gameContainer {
-    pointer-events: none;
-    padding: 0 16px;
-}
-
-#modal.hidden + #gameContainer {
-    pointer-events: auto;
+#gameContainer.active canvas {
+    pointer-events: auto !important;
 }
 
 #modal {

@@ -31,8 +31,8 @@ let achievedMessages = []; // for displaying pop-up reward messages
 let images = {};
 
 function startGame() {
-    select("#modal").addClass("hidden");
-    print("started");
+    document.getElementById("modal").classList.add("hidden");
+    document.getElementById("gameContainer").classList.add("active");
 }
 
 function preload() {
@@ -59,7 +59,7 @@ function setup() {
     let canvasHeight = rows * boxSize + (rows - 1) * spacing;
 
     canvas = createCanvas(canvasWidth, canvasHeight);
-    canvas.parent("#canvas");
+    canvas.parent("#gameContainer");
     rectMode(CENTER);
 
     for (let x = 0; x < cols; x++) {
@@ -172,6 +172,12 @@ function touchStarted() {
 }
 
 function handleInput(mx, my) {
+    if (
+        document.getElementById("modal").classList.contains("hidden") === false
+    ) {
+        return; // Don't allow clicks if modal is visible
+    }
+
     let offsetX = -(cols * (boxSize + spacing)) / 2 + (boxSize + spacing) / 2;
     let offsetY = -(rows * (boxSize + spacing)) / 2 + (boxSize + spacing) / 2;
 
@@ -230,8 +236,7 @@ function handleInput(mx, my) {
                     waitingToCollapse = true;
                     triggerShake();
                 } else {
-                    // Optional: Flash UI to indicate bomb is unavailable
-                    console.log("Not enough points to bomb single fruit.");
+                    showAchievement(`💣 Not enough points for bombs`);
                 }
             }
         }
