@@ -12,9 +12,8 @@ body {
     background: #9ff7e4;
     height: 100%;
     width: 100%;
-    font-size: 20px;
+    font-size: 16px;
     text-align: center;
-    border: 2px solid;
 }
 
 main {
@@ -27,8 +26,11 @@ main {
 
 #hud {
     position: fixed;
-    top: 0;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
+    max-width: 600px;
     padding: 16px;
     display: flex;
     justify-content: space-between;
@@ -43,7 +45,6 @@ canvas,
     display: block;
     box-sizing: border-box;
     touch-action: none;
-    border: 2px solid plum;
 }
 
 #gameContainer {
