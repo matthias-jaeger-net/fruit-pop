@@ -166,16 +166,6 @@ function mousePressed() {
     handleInput(mouseX, mouseY);
 }
 
-function touchStarted() {
-    let target = document.activeElement;
-    if (target && (target.tagName === "BUTTON" || target.tagName === "INPUT")) {
-        return; // Let native button/input handle it
-    }
-
-    handleInput(touches[0].x, touches[0].y);
-    return false;
-}
-
 function handleInput(mx, my) {
     if (
         document.getElementById("modal").classList.contains("hidden") === false
