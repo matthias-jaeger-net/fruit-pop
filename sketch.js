@@ -1,5 +1,5 @@
 let cols = 4;
-let rows = 6;
+let rows = 5;
 let boxSize;
 let spacing = 8;
 let fruits = ["apple", "grape", "banana", "orange"];
