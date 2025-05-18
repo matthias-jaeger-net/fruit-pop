@@ -232,6 +232,7 @@ function handleInput(mx, my) {
                     select("#score").html(score);
                     sound4.play();
                     waitingToCollapse = true;
+                    triggerShake();
                 } else {
                     // Optional: Flash UI to indicate bomb is unavailable
                     console.log("Not enough points to bomb single fruit.");

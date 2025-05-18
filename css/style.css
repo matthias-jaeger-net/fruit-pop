@@ -49,6 +49,7 @@ canvas,
 
 #gameContainer {
     pointer-events: none;
+    padding: 0 32px;
 }
 
 #modal.hidden + #gameContainer {
