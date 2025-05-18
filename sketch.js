@@ -2,7 +2,8 @@ let cols = 5;
 let rows = 9;
 let boxSize;
 let spacing = 8;
-let fruits = ["apple", "grape", "banana", "orange"];
+let fruits = ["apple", "grape", "banana", "orange", "melon", "pear"];
+let currentFruits = ["apple", "grape"];
 let bombMode = false;
 let bombCost = 5;
 
@@ -40,6 +41,8 @@ function preload() {
     images.orange = loadImage("images/orange.png");
     images.grape = loadImage("images/grape.png");
     images.banana = loadImage("images/banana.png");
+    images.pear = loadImage("images/pear.png");
+    images.melon = loadImage("images/melon.png");
     images.bomb = loadImage("images/bomb.png");
 
     sound1 = loadSound("sounds/ui-pop-sound-316482.mp3");
@@ -68,18 +71,6 @@ function setup() {
             grid[x][y] = createBox(y);
         }
     }
-}
-
-function createBox(y) {
-    let fruitType = random(fruits);
-    return {
-        exists: true,
-        targetY: y,
-        animY: y,
-        collapsing: false,
-        size: boxSize,
-        fruit: fruitType,
-    };
 }
 
 function draw() {
@@ -177,6 +168,7 @@ function touchStarted() {
     ) {
         return; // Don't allow clicks if modal is visible
     }
+
     handleInput(touches[0].x, touches[0].y);
     return false;
 }
@@ -288,6 +280,18 @@ function applyGravity() {
     }
 }
 
+function createBox(y) {
+    let fruitType = random(currentFruits);
+    return {
+        exists: true,
+        targetY: y,
+        animY: y,
+        collapsing: false,
+        size: boxSize,
+        fruit: fruitType,
+    };
+}
+
 function createEmptyBox() {
     return {
         exists: false,
@@ -302,6 +306,23 @@ function createEmptyBox() {
 function checkAchievements(group) {
     // 1. Track highest streak for each fruit
     let fruitType = grid[group[0].x][group[0].y].fruit;
+
+    if (group.length == rows * cols) {
+        achievements.bestStreaks[fruitType] = group.length;
+        showAchievement(`🎉 ${fruitType}s completed.`);
+
+        // Add next fruit if available
+        if (currentFruits.length < fruits.length) {
+            for (let f of fruits) {
+                if (!currentFruits.includes(f)) {
+                    currentFruits.push(f);
+                    showAchievement(`🍓 New fruit unlocked: ${f}!`);
+                    break;
+                }
+            }
+        }
+    }
+
     if (group.length > achievements.bestStreaks[fruitType]) {
         achievements.bestStreaks[fruitType] = group.length;
         showAchievement(`🎉 ${group.length} ${fruitType}s combo.`);
