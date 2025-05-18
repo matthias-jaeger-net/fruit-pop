@@ -1,5 +1,5 @@
 let cols = 4;
-let rows = 5;
+let rows = 6;
 let boxSize;
 let spacing = 8;
 let fruits = ["apple", "grape", "banana", "orange"];
@@ -53,11 +53,15 @@ function preload() {
 
 function setup() {
     randomSeed(1);
-    canvas = createCanvas(9 * 80, 16 * 80);
+
+    boxSize = 80; // You can adjust this to your preferred tile size
+
+    let canvasWidth = cols * boxSize + (cols - 1) * spacing;
+    let canvasHeight = rows * boxSize + (rows - 1) * spacing;
+
+    canvas = createCanvas(canvasWidth, canvasHeight);
     canvas.parent("#canvas");
     rectMode(CENTER);
-
-    boxSize = width / cols;
 
     for (let x = 0; x < cols; x++) {
         grid[x] = [];
@@ -65,6 +69,7 @@ function setup() {
             grid[x][y] = createBox(y);
         }
     }
+
     sound2.play();
 }
 

@@ -7,20 +7,27 @@
     font-family: "Delius Swash Caps", cursive;
 }
 
-body,
-main {
+html,
+body {
     background: #9ff7e4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
     height: 100%;
     width: 100%;
     font-size: 20px;
     text-align: center;
+    border: 2px solid;
+}
+
+main {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
 #hud {
+    position: fixed;
+    top: 0;
     width: 100%;
     padding: 16px;
     display: flex;
@@ -30,12 +37,13 @@ main {
 canvas,
 #defaultCanvas0 {
     width: 100% !important;
-    max-width: 630px !important;
+    max-width: 600px !important;
     height: auto !important;
-    max-height: 1120px !important;
+    max-height: 600px !important;
     display: block;
     box-sizing: border-box;
     touch-action: none;
+    border: 2px solid plum;
 }
 
 #gameContainer {
@@ -61,10 +69,13 @@ canvas,
 }
 
 #achievementContainer {
-    position: absolute;
-    top: 32px;
-    left: 32px;
-    right: 32px;
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 600px;
+    padding: 0 16px;
     z-index: 10;
 }
 
