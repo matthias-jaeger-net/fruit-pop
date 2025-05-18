@@ -14,7 +14,7 @@ main {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     font-size: 20px;
     text-align: center;
@@ -35,11 +35,12 @@ canvas,
     max-height: 1120px !important;
     display: block;
     box-sizing: border-box;
-    touch-action: none; /* Important for iOS */
+    touch-action: none;
 }
 
 #gameContainer {
     pointer-events: none;
+    padding: 8px;
 }
 
 #modal.hidden + #gameContainer {

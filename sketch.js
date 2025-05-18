@@ -1,7 +1,7 @@
-let cols = 5;
-let rows = 7;
+let cols = 4;
+let rows = 6;
 let boxSize;
-let spacing = 0;
+let spacing = 8;
 let fruits = ["apple", "grape", "banana", "orange"];
 let bombMode = false;
 let bombCost = 5;
