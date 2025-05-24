@@ -1,0 +1,19 @@
+#notification {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 600px;
+    padding: 0 16px;
+    z-index: 10;
+}
+
+.achievement-message {
+    background: #fff;
+    color: #111;
+    padding: 16px;
+    margin: 5px auto;
+    border-radius: 12px;
+    animation: fadeInOut 2s ease-in-out forwards;
+}

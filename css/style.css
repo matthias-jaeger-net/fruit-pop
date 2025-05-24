@@ -14,6 +14,17 @@ body {
     width: 100%;
     font-size: 20px;
     text-align: center;
+    color: #111;
+}
+
+h2 {
+    font-size: 40px;
+}
+h3 {
+    color: #8c8a8a;
+}
+p {
+    color: #8c8a8a;
 }
 
 main {
@@ -54,68 +65,4 @@ canvas,
 
 #gameContainer.active canvas {
     pointer-events: auto !important;
-}
-
-#modal {
-    background: #9ff7e4;
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#modal .text,
-#modal .action {
-    padding: 16px;
-    width: 100%;
-}
-
-#modal .cover {
-    width: 100%;
-    height: 250px;
-    background-image: url(../images/cover.png);
-    background-repeat: repeat-x;
-    background-position: top;
-    background-size: auto 250px;
-}
-
-.hidden {
-    display: none !important;
-}
-
-#achievementContainer {
-    position: fixed;
-    top: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 600px;
-    padding: 0 16px;
-    z-index: 10;
-}
-
-.achievement-message {
-    background: #fff;
-    color: #111;
-    padding: 16px;
-    margin: 5px auto;
-    border-radius: 12px;
-    animation: fadeInOut 2s ease-in-out forwards;
-}
-
-.button {
-    text-align: center;
-    text-decoration: none;
-    font-size: 20px;
-    width: 100%;
-    background-color: #414bde;
-    color: #fff;
-    padding: 24px 32px;
-    border-radius: 24px;
-    max-width: 600px;
 }

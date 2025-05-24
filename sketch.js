@@ -1,9 +1,9 @@
 let cols = 5;
-let rows = 9;
+let rows = 7;
 let boxSize;
 let spacing = 8;
 let fruits = ["apple", "grape", "banana", "orange", "melon", "pear"];
-let currentFruits = ["apple", "grape"];
+let currentFruits = ["apple", "grape", "pear"];
 let bombMode = false;
 let bombCost = 5;
 
@@ -32,8 +32,8 @@ let achievedMessages = []; // for displaying pop-up reward messages
 let images = {};
 
 function startGame() {
-    document.getElementById("modal").classList.add("hidden");
-    document.getElementById("gameContainer").classList.add("active");
+    select("#splash-screen").addClass("hidden");
+    select("#gameContainer").addClass("active");
 }
 
 function preload() {
@@ -51,6 +51,8 @@ function preload() {
     sound3.amp(0.12);
 
     sound4 = loadSound("sounds/explosion-312361.mp3");
+
+    sound5 = loadSound("sounds/error-126627.mp3");
 }
 
 function setup() {
@@ -107,7 +109,6 @@ function draw() {
                 pop();
             }
         }
-        drawAchievements();
     }
     select("#bombs").html(score / bombCost);
 
@@ -155,16 +156,20 @@ function animateBoxes() {
 
 function mousePressed() {
     if (
-        document.getElementById("modal").classList.contains("hidden") === false
+        document
+            .getElementById("gameContainer")
+            .classList.contains("active") === false
     ) {
-        return; // Don't allow clicks if modal is visible
+        return;
     }
     handleInput(mouseX, mouseY);
 }
 
 function touchStarted() {
     if (
-        document.getElementById("modal").classList.contains("hidden") === false
+        document
+            .getElementById("gameContainer")
+            .classList.contains("active") === false
     ) {
         return; // Don't allow clicks if modal is visible
     }
@@ -230,9 +235,12 @@ function handleInput(mx, my) {
                     select("#score").html(score);
                     sound4.play();
                     waitingToCollapse = true;
+                    showNotification(
+                        `💣 ${floor(score / bombCost)} bombs left`
+                    );
                     triggerShake();
                 } else {
-                    showAchievement(`💣 Not enough points for bombs`);
+                    showModal(`💣 Not enough points for bombs`, "bomb");
                 }
             }
         }
@@ -309,14 +317,14 @@ function checkAchievements(group) {
 
     if (group.length == rows * cols) {
         achievements.bestStreaks[fruitType] = group.length;
-        showAchievement(`🎉 ${fruitType}s completed.`);
+        showNotification(`🎉 ${fruitType}s completed.`);
 
         // Add next fruit if available
         if (currentFruits.length < fruits.length) {
             for (let f of fruits) {
                 if (!currentFruits.includes(f)) {
                     currentFruits.push(f);
-                    showAchievement(`🍓 New fruit unlocked: ${f}!`);
+                    showModal(`🍓 New fruit unlocked: ${f}!`, f);
                     break;
                 }
             }
@@ -325,7 +333,7 @@ function checkAchievements(group) {
 
     if (group.length > achievements.bestStreaks[fruitType]) {
         achievements.bestStreaks[fruitType] = group.length;
-        showAchievement(`🎉 ${group.length} ${fruitType}s combo.`);
+        showNotification(`🎉 ${group.length} ${fruitType}s combo.`);
     }
 }
 
@@ -338,8 +346,8 @@ function isGridEmpty() {
     return true;
 }
 
-function showAchievement(message) {
-    let container = select("#achievementContainer");
+function showNotification(message, sound) {
+    let container = select("#notification");
 
     let div = createDiv(message);
     div.parent(container);
@@ -351,19 +359,21 @@ function showAchievement(message) {
     }, 2000);
 
     // Optional sound
-    sound2.play();
+    if (!sound) {
+        sound2.play();
+    } else {
+        sound.play();
+    }
 }
 
-function drawAchievements() {
-    textAlign(CENTER);
-    textSize(24);
-    fill("#FFD700");
-    for (let i = achievedMessages.length - 1; i >= 0; i--) {
-        let msg = achievedMessages[i];
-        text(msg.text, 0, -height / 2 + 40 + i * 30);
-        msg.timer--;
-        if (msg.timer <= 0) {
-            achievedMessages.splice(i, 1);
-        }
-    }
+function showModal(message, img) {
+    select("#modal").removeClass("hidden");
+    select("#modal .coin").html(`<img src="images/${img}.png">`);
+    select("#message").html(message);
+    select("#gameContainer").removeClass("active");
+}
+
+function continueGame() {
+    select("#modal").addClass("hidden");
+    select("#gameContainer").addClass("active");
 }

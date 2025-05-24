@@ -5,6 +5,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.3/addons/p5.sound.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/style.css" />
         <link rel="stylesheet" type="text/css" href="css/animations.css" />
+        <link rel="stylesheet" href="css/splash-screen.css" />
+        <link rel="stylesheet" href="css/notification.css" />
+        <link rel="stylesheet" href="css/modal.css" />
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0, user-scalable=no"
@@ -13,9 +16,24 @@
     </head>
     <body>
         <main>
-            <div id="achievementContainer"></div>
-
-            <div id="modal" class="">
+            <div id="notification"></div>
+            <div id="modal" class="hidden">
+                <header>
+                    <div class="coin"><img src="images/star.png" alt="" /></div>
+                    <h2>Master of Fruits</h2>
+                    <h3>Achievement</h3>
+                </header>
+                <p id="message">
+                    What a juicy pop! <br />
+                    You completed a board <br />
+                    with all 24 apples at once!
+                </p>
+                <p>Complete en' all for the win</p>
+                <button class="button" onclick="continueGame()">
+                    Keep poppin’ fruit
+                </button>
+            </div>
+            <div id="splash-screen" class="">
                 <div class="cover"></div>
                 <div class="text">
                     <h1>FruitPop</h1>
