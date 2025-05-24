@@ -1,7 +1,7 @@
-let cols = 5;
+let cols = 4;
 let rows = 7;
 let boxSize;
-let spacing = 8;
+let spacing = 16;
 let fruits = ["apple", "grape", "banana", "orange", "melon", "pear"];
 let currentFruits = ["apple", "grape", "pear"];
 let bombMode = false;
@@ -58,14 +58,13 @@ function preload() {
 function setup() {
     randomSeed(1);
 
-    boxSize = 80; // You can adjust this to your preferred tile size
+    boxSize = 100;
 
     let canvasWidth = cols * boxSize + (cols - 1) * spacing;
     let canvasHeight = rows * boxSize + (rows - 1) * spacing;
 
     canvas = createCanvas(canvasWidth, canvasHeight);
     canvas.parent("#gameContainer");
-    rectMode(CENTER);
 
     for (let x = 0; x < cols; x++) {
         grid[x] = [];
@@ -235,12 +234,13 @@ function handleInput(mx, my) {
                     select("#score").html(score);
                     sound4.play();
                     waitingToCollapse = true;
-                    showNotification(
-                        `💣 ${floor(score / bombCost)} bombs left`
-                    );
                     triggerShake();
                 } else {
-                    showModal(`💣 Not enough points for bombs`, "bomb");
+                    showModal(
+                        `Not enough points for bombs!<br>A bomb costs you ${bombCost} coins. <br>Pop fruit to get coins.`,
+                        "bomb",
+                        "Out of bombs!"
+                    );
                 }
             }
         }
@@ -324,7 +324,13 @@ function checkAchievements(group) {
             for (let f of fruits) {
                 if (!currentFruits.includes(f)) {
                     currentFruits.push(f);
-                    showModal(`🍓 New fruit unlocked: ${f}!`, f);
+                    showModal(
+                        `What a juicy pop!<br> 
+                         You completed the board<br>
+                         with all ${rows * cols} ${fruitType}s!`,
+                        fruitType,
+                        `Master of ${fruitType}!`
+                    );
                     break;
                 }
             }
@@ -366,7 +372,10 @@ function showNotification(message, sound) {
     }
 }
 
-function showModal(message, img) {
+function showModal(message, img, title) {
+    select("#title").html(title);
+
+    select("#modal").addClass("shake");
     select("#modal").removeClass("hidden");
     select("#modal .coin").html(`<img src="images/${img}.png">`);
     select("#message").html(message);

@@ -15,6 +15,7 @@ body {
     font-size: 20px;
     text-align: center;
     color: #111;
+    padding: 8px;
 }
 
 h2 {
@@ -60,7 +61,7 @@ canvas,
 }
 
 #gameContainer {
-    padding: 32px;
+    padding: 7px;
 }
 
 #gameContainer.active canvas {
