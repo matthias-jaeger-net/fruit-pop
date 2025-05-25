@@ -1,9 +1,18 @@
-let cols = 4;
-let rows = 7;
+let cols = 5;
+let rows = 9;
 let boxSize;
-let spacing = 16;
-let fruits = ["apple", "grape", "banana", "orange", "melon", "pear"];
-let currentFruits = ["apple", "grape", "pear"];
+let spacing = 0;
+let fruits = [
+    "apple",
+    "grape",
+    "banana",
+    "orange",
+    "melon",
+    "pear",
+    "strawberry",
+];
+let currentFruits = ["orange", "grape", "strawberry"];
+let newUnlockedFruit = "";
 let bombMode = false;
 let bombCost = 5;
 
@@ -32,6 +41,7 @@ let achievedMessages = []; // for displaying pop-up reward messages
 let images = {};
 
 function startGame() {
+    soundSuccess.play();
     select("#splash-screen").addClass("hidden");
     select("#gameContainer").addClass("active");
 }
@@ -44,15 +54,19 @@ function preload() {
     images.pear = loadImage("images/pear.png");
     images.melon = loadImage("images/melon.png");
     images.bomb = loadImage("images/bomb.png");
+    images.strawberry = loadImage("images/strawberry.png");
 
-    sound1 = loadSound("sounds/ui-pop-sound-316482.mp3");
-    sound2 = loadSound("sounds/success-1-6297(1).mp3");
-    sound3 = loadSound("sounds/fast-whoosh-118248.mp3");
-    sound3.amp(0.12);
+    soundPop = loadSound("sounds/ui-pop-sound-316482.mp3");
+    soundSuccess = loadSound("sounds/success-1-6297(1).mp3");
+    soundSwoosh = loadSound("sounds/fast-whoosh-118248.mp3");
+    soundSwoosh.amp(0.12);
 
-    sound4 = loadSound("sounds/explosion-312361.mp3");
+    soundBomb = loadSound("sounds/explosion-312361.mp3");
+    soundTimer = loadSound("sounds/clock-ticking-sound-effect-240503.mp3");
 
-    sound5 = loadSound("sounds/error-126627.mp3");
+    soundUnlockFruit = loadSound("sounds/new-fruit-unlcoked.mp3");
+
+    soundError = loadSound("sounds/error-8-206492(1).mp3");
 }
 
 function setup() {
@@ -204,23 +218,12 @@ function handleInput(mx, my) {
                 checkAchievements(group);
                 score += group.length;
                 select("#score").html(score);
-                sound1.play();
-                sound3.play();
-
-                if (score % 1000 === 0 && score > 0) {
-                    shakeDuration = 20;
-                    triggerShake();
-                }
-
-                if (score % 10 === 0) {
-                    triggerFlash();
-                }
+                soundPop.play();
+                soundSwoosh.play();
 
                 if (group.length > record) {
                     record = group.length;
                     select("#record").html(record + " / " + cols * rows);
-                    //sound2.play();
-                    //sound3.play();
                     triggerShake();
                 }
 
@@ -229,15 +232,20 @@ function handleInput(mx, my) {
                 // 🔥 Auto bomb: destroy single if enough points
                 if (score >= bombCost) {
                     b.isBomb = true;
-                    b.collapsing = true;
                     score -= bombCost;
                     select("#score").html(score);
-                    sound4.play();
-                    waitingToCollapse = true;
-                    triggerShake();
+                    soundTimer.play();
+                    setTimeout(() => {
+                        b.collapsing = true;
+                        soundBomb.play();
+                        waitingToCollapse = true;
+                        triggerShake();
+                        soundTimer.stop();
+                    }, 1000);
                 } else {
+                    soundError.play();
                     showModal(
-                        `Not enough points for bombs!<br>A bomb costs you ${bombCost} coins. <br>Pop fruit to get coins.`,
+                        `Not enough points for bombs!. Pop fruit to get coins.`,
                         "bomb",
                         "Out of bombs!"
                     );
@@ -317,19 +325,20 @@ function checkAchievements(group) {
 
     if (group.length == rows * cols) {
         achievements.bestStreaks[fruitType] = group.length;
-        showNotification(`🎉 ${fruitType}s completed.`);
 
         // Add next fruit if available
         if (currentFruits.length < fruits.length) {
             for (let f of fruits) {
                 if (!currentFruits.includes(f)) {
                     currentFruits.push(f);
+                    newUnlockedFruit = f;
                     showModal(
                         `What a juicy pop!<br> 
                          You completed the board<br>
                          with all ${rows * cols} ${fruitType}s!`,
                         fruitType,
-                        `Master of ${fruitType}!`
+                        `Master of ${fruitType}s!`,
+                        unlocked
                     );
                     break;
                 }
@@ -366,23 +375,34 @@ function showNotification(message, sound) {
 
     // Optional sound
     if (!sound) {
-        sound2.play();
+        soundSuccess.play();
     } else {
         sound.play();
     }
 }
 
-function showModal(message, img, title) {
+function showModal(message, img, title, action) {
     select("#title").html(title);
+    select("#notification").html("");
 
     select("#modal").addClass("shake");
     select("#modal").removeClass("hidden");
     select("#modal .coin").html(`<img src="images/${img}.png">`);
     select("#message").html(message);
     select("#gameContainer").removeClass("active");
+    if (action) {
+        select("#modal button").mousePressed(action);
+    }
 }
 
 function continueGame() {
+    select("#modal").addClass("hidden");
+    select("#gameContainer").addClass("active");
+}
+
+function unlocked() {
+    showNotification(`🎉 New fruit unlocked ${newUnlockedFruit}s!`);
+    soundUnlockFruit.play();
     select("#modal").addClass("hidden");
     select("#gameContainer").addClass("active");
 }
